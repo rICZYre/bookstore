@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; 
+            height: 100vh; 
+            background-image: url(/uploads/bg2.jpg); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            display: flex;
+            justify-content: center;
+        }
+        #login {
+            background-color: white;
+            width: 250pt;
+            height: 250pt;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 100pt;
+            border-radius: 30px;
+        }
+        #border {
+            border: 2px #99a6be solid;
+            border-radius: 30px;
+            padding: 5pt;
+            margin-bottom: 10pt;
+            margin-left: 20pt;
+            margin-right: 20pt;
+        }
+        h2 {
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        }
+        label {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .logindesign {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 210pt;
+            height: 28pt;
+            color: white;
+            background-color: #091f3e;
+            border-radius: 30px;
+        }
+        #toggle-password {
+            cursor: pointer;
+            color: #333;
+        }
+        .submit {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            width: 210pt;
+            height: 28pt;
+            color: white;
+            background-color: #f2847b;
+            border: 2px #cf2414 solid;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .logindesign {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="login">
+        <br><br>
+        <h2>Log In</h2>
+        <form method="POST" action="/admin/login">
+            <div id="border">
+                <label for="username">Username |</label>
+                <input type="text" id="username" name="username" style="width: 124pt; border: none; padding-top: 2pt; padding-bottom: 2pt;" required>
+            </div>
+            <div id="border">
+                <label for="password">Password |</label>
+                <input type="password" id="password" name="password" style="width: 100pt; border: none; padding-top: 2pt; padding-bottom: 2pt;" required>
+                <img id="toggle-password" src="/uploads/open-eye.png" alt="Toggle Password" style="cursor: pointer; width: 16pt; height: auto;" onclick="togglePassword()">
+            </div>
+            <input type="submit" value="Log in" class="logindesign">
+            
+            <% if (typeof error !== 'undefined') { %>
+                <div class="error-message">
+                    <%= error %>
+                </div>
+            <% } %>
+        </form>
+    </div>
+
+    <script>
+        function togglePassword() {
+            var passwordField = document.getElementById('password');
+            var toggleIcon = document.getElementById('toggle-password');
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.src = '/uploads/closed-eye.png';
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.src = '/uploads/open-eye.png';
+            }
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0; 
+            height: 100vh; 
+            background-image: url(bg2.jpg); 
+            background-size: cover; 
+            background-position: center; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #add-book-form {
+            background-color: white;
+            width: 300pt;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="file"], input[type="number"], select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0275d8; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #025aa5; 
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="add-book-form">
+        <h1>Add New Book</h1>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="error-message">
+                <p><%= error %></p>
+            </div>
+        <% } %>
+
+        <form action="/admin/add-book" method="post" enctype="multipart/form-data">
+            <label for="id">Book ID:</label>
+            <input type="text" id="id" name="id" required maxlength="20">
+
+            <label for="name">Book Name:</label>
+            <input type="text" id="name" name="name" required maxlength="20">
+
+            <label for="author">Book Author:</label>
+            <input type="text" id="author" name="author" required maxlength="50">
+
+            <label for="genre">Book Genre:</label>
+            <select id="genre" name="genre" required>
+                <option value="">Select Genre</option>
+                <option value="Fiction">Fiction</option>
+                <option value="Non-Fiction">Non-Fiction</option>
+                <option value="Children's Literature">Children's Literature</option>
+                <option value="Educational">Educational</option>
+            </select>
+
+            <label for="price">Book Price:</label>
+            <input type="number" id="price" name="price" required min="0" step="0.01" placeholder="e.g., ₱100">
+
+            <label for="image">Upload Image:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+
+            <button type="submit">Add Book</button>
+        </form>
+    </div>
+
+</body>
+</html>

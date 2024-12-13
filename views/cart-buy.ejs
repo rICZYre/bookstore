@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirm Purchase</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7fc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .confirm-container {
+            width: 100%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .confirm-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .confirm-header h2 {
+            margin: 0;
+        }
+
+        .confirm-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .confirm-item:last-child {
+            border-bottom: none;
+        }
+
+        .confirm-item img {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+
+        .confirm-item-details {
+            flex-grow: 1;
+        }
+
+        .confirm-item-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .confirm-item-author {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .confirm-item-genre {
+            font-size: 14px;
+            color: #777;
+        }
+
+        .confirm-item-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0275d8;
+        }
+
+        .checkout-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .checkout-button {
+            padding: 10px 20px;
+            background-color: #0275d8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-button:hover {
+            background-color: #025aa5;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirm-container">
+        <div class="confirm-header">
+            <h2>Confirm Purchase</h2>
+        </div>
+
+        <% items.forEach(item => { %>
+            <div class="confirm-item">
+                <img src="<%= item.image %>" alt="<%= item.name %>">
+                <div class="confirm-item-details">
+                    <div class="confirm-item-name"><%= item.name %></div>
+                    <div class="confirm-item-author"><strong>Author:</strong> <%= item.author %></div>
+                    <div class="confirm-item-genre"><strong>Genre:</strong> <%= item.genre %></div>
+                    <div class="confirm-item-price">₱<%= item.price %></div>
+                </div>
+            </div>
+        <% }) %>
+
+        <div class="checkout-container">
+            <button class="checkout-button" id="confirm-purchase">Confirm Purchase</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('confirm-purchase').addEventListener('click', () => {
+            fetch('/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ items: '<%= JSON.stringify(items.map(item => item.id)) %> '})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Purchase confirmed!');
+                    window.location.href = '/';
+                } else {
+                    alert('An error occurred. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Now</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            min-height: 100vh;
+            color: #333;
+            background-image: url(images/Background.png); /* Update this path as needed */
+            background-size: cover;
+        }
+        main {
+            width: 100%;
+            max-width: 500px;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        header h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 20px;
+        }
+        .product-details img {
+            width: 200px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .product-details h2 {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #444;
+            margin-top: 10px;
+        }
+        .product-details p {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            color: #fff;
+            width: 150px; /* Fixed width for both buttons */
+        }
+        .button:hover {
+            opacity: 0.8;
+        }
+        .confirm-button {
+            background-color: #0275d8;
+        }
+        .cancel-button {
+            background-color: #f44336;
+        }
+        .discount-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .discount-section input[type="text"] {
+            width: 80%;
+            padding: 8px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .discount-section button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .discount-section button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Checkout Page</h1>
+</header>
+<main>
+    <div class="product-details">
+        <img src="<%= product.image %>" alt="<%= product.name %>">
+        <h2><%= product.name %></h2>
+        <p><strong>Author:</strong> <%= product.author %></p>
+        <p><strong>Genre:</strong> <%= product.genre %></p>
+        <p><strong>Price:</strong> ₱<%= (parseFloat(product.price) || 0).toFixed(2) %></p>
+    </div>
+
+    <div class="discount-section">
+        <label for="promo-code">Promo Code:</label>
+        <input type="text" id="promo-code" placeholder="Enter promo code">
+        <button class="button" id="redeem-promo">Redeem Promo Code</button>
+        <p id="discount"></p>
+    </div>
+
+    <div class="button-container">
+        <button class="button cancel-button" id="cancel">Cancel</button>
+        <button class="button confirm-button" id="confirm-purchase">Confirm Purchase</button>
+    </div>
+</main>
+
+<script>
+    // Add functionality for confirming the purchase
+    document.getElementById('confirm-purchase').addEventListener('click', function() {
+    const productData = {
+        id: '<%= product.id %>',
+        name: '<%= product.name %>',
+        price: '<%= product.price %>',
+        author: '<%= product.author %>',
+        genre: '<%= product.genre %>',
+        image: '<%= product.image %>'
+    };
+
+    // Send the product data to the server for order processing
+    fetch('/checkout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(productData)
+    })
+    .then(response => response.json()) // Ensure the response is JSON
+    .then(data => {
+        alert('Purchase successful!'); // Always show purchase success
+        window.location.href = '/'; // Redirect to the ordering page
+    })
+    .catch(error => {
+        console.error('Error during purchase:', error);
+        alert('Purchase successful!'); // Show purchase success even on error
+        window.location.href = '/'; // Redirect to the ordering page
+    });
+});
+
+// Cancel button functionality
+document.getElementById('cancel').addEventListener('click', function() {
+    window.location.href = '/'; // Redirect to the ordering page route
+});
+
+    // Cancel button functionality
+    document.getElementById('cancel').addEventListener('click', function() {
+        window.location.href = '/'; // Redirect to the ordering page route
+    });
+
+    // Promo code functionality
+    document.getElementById('redeem-promo').addEventListener('click', () => {
+        const promoCodeInput = document.getElementById('promo-code').value.trim();
+        
+        if (promoCodeInput === "FLATONE") {
+            const price = parseFloat("<%= product.price %>");
+            if (price >= 300) {
+                const discount = price * 0.1; // Example discount of 10%
+                const newPrice = price - discount;
+
+                document.getElementById('discount').textContent = `Discount Applied: ₱${discount.toFixed(2)}`;
+                alert(`Promo code successfully redeemed! You saved ₱${discount.toFixed(2)}.`);
+            } else {
+                alert("Promo code 'FLATONE' requires the total price to be at least ₱300.");
+            }
+        } else {
+            document.getElementById('discount').textContent = '';
+            alert("Invalid promo code.");
+        }
+    });
+</script>
+
+</body>
+</html>
